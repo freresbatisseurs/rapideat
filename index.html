@@ -24,7 +24,7 @@
       />
     </div>
     <div class="header-right">
-      <button class="btn-outline">Connexion</button>
+      <button class="btn-outline" id="openAuthBtn">Connexion</button>
       <button class="btn-primary" id="openCartBtn">
         Panier <span id="cartCount">0</span>
       </button>
@@ -50,6 +50,7 @@
     <button class="filter-btn" data-category="burger">Burger</button>
     <button class="filter-btn" data-category="japonais">Japonais</button>
     <button class="filter-btn" data-category="dessert">Dessert</button>
+    <button class="filter-btn" data-category="favorites">⭐ Favoris</button>
   </section>
 
   <!-- LISTE DES RESTAURANTS -->
@@ -84,6 +85,28 @@
           Valider la commande
         </button>
       </div>
+    </div>
+  </div>
+
+  <!-- MODALE CONNEXION / INSCRIPTION -->
+  <div id="authModal" class="modal hidden">
+    <div class="modal-content auth-modal">
+      <button class="modal-close" id="closeAuthModal">&times;</button>
+      <h2>Connexion / Inscription</h2>
+      <p class="auth-subtitle">
+        C’est une fausse connexion (pas de vrai serveur), juste pour personnaliser l’interface.
+      </p>
+      <form id="authForm" class="auth-form">
+        <label for="authName">Votre prénom ou pseudo</label>
+        <input type="text" id="authName" required placeholder="Ex : Gwen" />
+
+        <label for="authEmail">Email (facultatif)</label>
+        <input type="email" id="authEmail" placeholder="vous@example.com" />
+
+        <button type="submit" class="btn-primary auth-submit-btn">
+          Continuer
+        </button>
+      </form>
     </div>
   </div>
 

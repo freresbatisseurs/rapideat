@@ -119,7 +119,7 @@ let filteredCategory = "all";
 let cart = [];
 let currentUser = null;
 
-// Favoris stockés dans localStorage
+// Favoris dans localStorage
 let favorites = new Set(
   JSON.parse(localStorage.getItem("feFavorites") || "[]")
 );
@@ -149,6 +149,17 @@ const authModal = document.getElementById("authModal");
 const closeAuthModal = document.getElementById("closeAuthModal");
 const authForm = document.getElementById("authForm");
 const authNameInput = document.getElementById("authName");
+
+// Paiement DOM
+const paymentModal = document.getElementById("paymentModal");
+const closePaymentModal = document.getElementById("closePaymentModal");
+const paymentForm = document.getElementById("paymentForm");
+const paymentMethodRadios = document.querySelectorAll(
+  'input[name="paymentMethod"]'
+);
+const cardFields = document.getElementById("cardFields");
+const mtnFields = document.getElementById("mtnFields");
+const airtelFields = document.getElementById("airtelFields");
 
 // =========================
 //      FONCTIONS AUTH
@@ -465,6 +476,34 @@ function closeCart() {
 }
 
 // =========================
+//        PAIEMENT (DEMO)
+// =========================
+
+function openPayment() {
+  paymentModal.classList.remove("hidden");
+  updatePaymentFieldsVisibility();
+}
+
+function closePayment() {
+  paymentModal.classList.add("hidden");
+}
+
+function getSelectedPaymentMethod() {
+  let value = "card";
+  paymentMethodRadios.forEach((radio) => {
+    if (radio.checked) value = radio.value;
+  });
+  return value;
+}
+
+function updatePaymentFieldsVisibility() {
+  const method = getSelectedPaymentMethod();
+  cardFields.classList.toggle("hidden", method !== "card");
+  mtnFields.classList.toggle("hidden", method !== "mtn");
+  airtelFields.classList.toggle("hidden", method !== "airtel");
+}
+
+// =========================
 //          TOAST
 // =========================
 
@@ -507,12 +546,70 @@ cartModal.addEventListener("click", (e) => {
   }
 });
 
+// Quand on clique sur "Valider la commande"
 checkoutBtn.addEventListener("click", () => {
   if (cart.length === 0) {
     showToast("Votre panier est vide");
     return;
   }
-  alert("Simulation : commande validée ✅ (à toi d'ajouter la suite)");
+  openPayment();
+});
+
+// Paiement : changement de méthode
+paymentMethodRadios.forEach((radio) => {
+  radio.addEventListener("change", updatePaymentFieldsVisibility);
+});
+
+closePaymentModal.addEventListener("click", closePayment);
+paymentModal.addEventListener("click", (e) => {
+  if (e.target === paymentModal) {
+    closePayment();
+  }
+});
+
+// Soumission du formulaire de paiement (DEMO)
+paymentForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const method = getSelectedPaymentMethod();
+
+  if (method === "card") {
+    const name = document.getElementById("cardName").value.trim();
+    const number = document.getElementById("cardNumber").value.trim();
+    const expiry = document.getElementById("cardExpiry").value.trim();
+    const cvc = document.getElementById("cardCvc").value.trim();
+    if (!name || !number || !expiry || !cvc) {
+      showToast("Merci de remplir les informations de carte");
+      return;
+    }
+  } else if (method === "mtn") {
+    const phone = document.getElementById("mtnPhone").value.trim();
+    if (!phone) {
+      showToast("Merci de renseigner votre numéro MTN Mobile Money");
+      return;
+    }
+  } else if (method === "airtel") {
+    const phone = document.getElementById("airtelPhone").value.trim();
+    if (!phone) {
+      showToast("Merci de renseigner votre numéro Airtel Mobile Money");
+      return;
+    }
+  }
+
+  // ICI : à connecter plus tard à une vraie API de paiement (Stripe, MTN, Airtel, etc.)
+  alert(`Paiement simulé avec : ${
+    method === "card"
+      ? "Carte bancaire"
+      : method === "mtn"
+      ? "MTN Mobile Money"
+      : "Airtel Mobile Money"
+  }\n\n(À remplacer plus tard par une vraie intégration de paiement.)`);
+
+  // Vider le panier après "paiement"
+  cart = [];
+  updateCartUI();
+  closePayment();
+  closeCart();
+  showToast("Commande validée ✅");
 });
 
 // =========================

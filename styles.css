@@ -100,6 +100,11 @@ body {
   background-color: #f2f2f2;
 }
 
+/* Quand utilisateur connecté */
+.btn-logged {
+  border-color: #06c167;
+}
+
 /* HERO / BANNIÈRE */
 .hero {
   background-image: linear-gradient(120deg, #06c167, #0bbf93);
@@ -222,7 +227,7 @@ body {
   color: #999;
 }
 
-/* BOUTON FAVORI SUR LA CARTE RESTO */
+/* BOUTON FAVORI */
 .favorite-btn {
   position: absolute;
   top: 8px;
@@ -248,7 +253,7 @@ body {
   color: #ff4b6a;
 }
 
-/* MODALES */
+/* MODALES GÉNÉRALES */
 .modal {
   position: fixed;
   inset: 0;
@@ -449,6 +454,70 @@ body {
   margin-top: 0.75rem;
 }
 
+/* MODALE PAIEMENT */
+.payment-modal {
+  max-width: 480px;
+}
+
+.payment-subtitle {
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 1rem;
+}
+
+.payment-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.payment-methods {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.payment-methods label {
+  font-size: 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.payment-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.payment-fields input {
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-size: 0.9rem;
+}
+
+.payment-row {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.payment-help {
+  font-size: 0.8rem;
+  color: #777;
+}
+
+.payment-submit-btn {
+  margin-top: 0.75rem;
+}
+
+.payment-note {
+  font-size: 0.8rem;
+  color: #777;
+  margin-top: 0.75rem;
+}
+
 /* TOAST */
 .toast {
   position: fixed;
@@ -469,6 +538,11 @@ body {
   opacity: 1;
 }
 
+/* UTILITAIRE */
+.hidden {
+  display: none !important;
+}
+
 /* RESPONSIVE */
 @media (max-width: 768px) {
   .header {
@@ -486,5 +560,9 @@ body {
 
   .modal-content {
     padding: 0.75rem 1rem 1rem;
+  }
+
+  .payment-row {
+    flex-direction: column;
   }
 }

@@ -187,6 +187,7 @@ body {
   border: 1px solid #eee;
   cursor: pointer;
   transition: transform 0.1s ease, box-shadow 0.1s ease;
+  position: relative;
 }
 
 .restaurant-card:hover {
@@ -219,6 +220,32 @@ body {
 .restaurant-tags {
   font-size: 0.75rem;
   color: #999;
+}
+
+/* BOUTON FAVORI SUR LA CARTE RESTO */
+.favorite-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  border-radius: 999px;
+  border: none;
+  width: 32px;
+  height: 32px;
+  background-color: rgba(255, 255, 255, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.favorite-btn span {
+  pointer-events: none;
+}
+
+.favorite-btn.active span {
+  color: #ff4b6a;
 }
 
 /* MODALES */
@@ -388,6 +415,38 @@ body {
 
 .cart-total {
   font-weight: 600;
+}
+
+/* MODALE CONNEXION */
+.auth-modal {
+  max-width: 420px;
+}
+
+.auth-subtitle {
+  font-size: 0.85rem;
+  color: #666;
+  margin-bottom: 1rem;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.auth-form label {
+  font-size: 0.85rem;
+}
+
+.auth-form input {
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-size: 0.9rem;
+}
+
+.auth-submit-btn {
+  margin-top: 0.75rem;
 }
 
 /* TOAST */

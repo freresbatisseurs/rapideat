@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>FastEat – Livraison de repas</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-left">
+      <div class="logo">FastEat</div>
+      <div class="location">
+        <span class="location-label">Livrer à</span>
+        <span class="location-value">Paris, France</span>
+      </div>
+    </div>
+    <div class="header-center">
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="Rechercher un restaurant ou un plat"
+      />
+    </div>
+    <div class="header-right">
+      <button class="btn-outline">Connexion</button>
+      <button class="btn-primary" id="openCartBtn">
+        Panier <span id="cartCount">0</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- BANNIÈRE -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Vos plats préférés, livrés rapidement.</h1>
+      <p>Commandez dans les meilleurs restaurants près de chez vous.</p>
+      <div class="hero-search">
+        <input type="text" placeholder="Entrez votre adresse" />
+        <button class="btn-primary">Trouver des restaurants</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- FILTRES / CATÉGORIES -->
+  <section class="filters">
+    <button class="filter-btn active" data-category="all">Tout</button>
+    <button class="filter-btn" data-category="pizza">Pizza</button>
+    <button class="filter-btn" data-category="burger">Burger</button>
+    <button class="filter-btn" data-category="japonais">Japonais</button>
+    <button class="filter-btn" data-category="dessert">Dessert</button>
+  </section>
+
+  <!-- LISTE DES RESTAURANTS -->
+  <main class="main">
+    <h2>Restaurants à proximité</h2>
+    <div id="restaurantsContainer" class="restaurants-grid">
+      <!-- Cartes restaurants injectées par JS -->
+    </div>
+  </main>
+
+  <!-- MODALE RESTAURANT (MENU) -->
+  <div id="restaurantModal" class="modal hidden">
+    <div class="modal-content">
+      <button class="modal-close" id="closeRestaurantModal">&times;</button>
+      <div id="restaurantDetails">
+        <!-- Détails du restaurant + menu injectés par JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- MODALE PANIER -->
+  <div id="cartModal" class="modal hidden">
+    <div class="modal-content cart-modal">
+      <button class="modal-close" id="closeCartModal">&times;</button>
+      <h2>Votre panier</h2>
+      <div id="cartItems"></div>
+      <div class="cart-footer">
+        <div class="cart-total">
+          Total : <span id="cartTotal">0,00 €</span>
+        </div>
+        <button class="btn-primary" id="checkoutBtn">
+          Valider la commande
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST / NOTIF -->
+  <div id="toast" class="toast hidden">Ajouté au panier</div>
+
+  <script src="app.js"></script>
+</body>
+</html>

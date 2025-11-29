@@ -88,6 +88,86 @@
     </div>
   </div>
 
+  <!-- MODALE PAIEMENT -->
+  <div id="paymentModal" class="modal hidden">
+    <div class="modal-content payment-modal">
+      <button class="modal-close" id="closePaymentModal">&times;</button>
+      <h2>Paiement</h2>
+      <p class="payment-subtitle">
+        Choisissez votre moyen de paiement et remplissez les informations.
+      </p>
+
+      <form id="paymentForm" class="payment-form">
+        <div class="payment-methods">
+          <label>
+            <input type="radio" name="paymentMethod" value="card" checked />
+            Carte bancaire
+          </label>
+          <label>
+            <input type="radio" name="paymentMethod" value="mtn" />
+            MTN Mobile Money
+          </label>
+          <label>
+            <input type="radio" name="paymentMethod" value="airtel" />
+            Airtel Mobile Money
+          </label>
+        </div>
+
+        <!-- CHAMPS CARTE -->
+        <div id="cardFields" class="payment-fields">
+          <label>
+            Nom sur la carte
+            <input type="text" id="cardName" placeholder="Ex : Annabelle Dupont" />
+          </label>
+          <label>
+            Numéro de carte
+            <input type="text" id="cardNumber" maxlength="19" placeholder="1234 5678 9012 3456" />
+          </label>
+          <div class="payment-row">
+            <label>
+              Expiration (MM/AA)
+              <input type="text" id="cardExpiry" maxlength="5" placeholder="12/27" />
+            </label>
+            <label>
+              CVC
+              <input type="password" id="cardCvc" maxlength="4" placeholder="123" />
+            </label>
+          </div>
+        </div>
+
+        <!-- CHAMPS MTN MONEY -->
+        <div id="mtnFields" class="payment-fields hidden">
+          <label>
+            Numéro MTN Mobile Money
+            <input type="tel" id="mtnPhone" placeholder="Ex : 06 12 34 56 78" />
+          </label>
+          <p class="payment-help">
+            Un code de confirmation sera envoyé sur votre téléphone (simulation).
+          </p>
+        </div>
+
+        <!-- CHAMPS AIRTEL MONEY -->
+        <div id="airtelFields" class="payment-fields hidden">
+          <label>
+            Numéro Airtel Mobile Money
+            <input type="tel" id="airtelPhone" placeholder="Ex : 06 98 76 54 32" />
+          </label>
+          <p class="payment-help">
+            Confirmez ensuite le paiement sur votre téléphone (simulation).
+          </p>
+        </div>
+
+        <button type="submit" class="btn-primary payment-submit-btn">
+          Confirmer le paiement
+        </button>
+      </form>
+
+      <p class="payment-note">
+        ⚠️ Démo uniquement : ne saisis pas de vraies informations de carte bancaire.
+      </p>
+    </div>
+  </div>
+
   <!-- MODALE CONNEXION / INSCRIPTION -->
   <div id="authModal" class="modal hidden">
     <div class="modal-content auth-modal">

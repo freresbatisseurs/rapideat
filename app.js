@@ -117,6 +117,12 @@ const restaurants = [
 // ÉTAT GLOBAL
 let filteredCategory = "all";
 let cart = [];
+let currentUser = null;
+
+// Favoris stockés dans localStorage
+let favorites = new Set(
+  JSON.parse(localStorage.getItem("feFavorites") || "[]")
+);
 
 // ÉLÉMENTS DOM
 const restaurantsContainer = document.getElementById("restaurantsContainer");
@@ -137,16 +143,114 @@ const checkoutBtn = document.getElementById("checkoutBtn");
 
 const toast = document.getElementById("toast");
 
-// RENDU DES RESTOS
+// Auth DOM
+const authBtn = document.getElementById("openAuthBtn");
+const authModal = document.getElementById("authModal");
+const closeAuthModal = document.getElementById("closeAuthModal");
+const authForm = document.getElementById("authForm");
+const authNameInput = document.getElementById("authName");
+
+// =========================
+//      FONCTIONS AUTH
+// =========================
+
+function loadAuthState() {
+  const storedName = localStorage.getItem("feUserName");
+  if (storedName) {
+    currentUser = storedName;
+  } else {
+    currentUser = null;
+  }
+  updateAuthUI();
+}
+
+function updateAuthUI() {
+  if (currentUser) {
+    authBtn.textContent = currentUser;
+    authBtn.classList.add("btn-logged");
+  } else {
+    authBtn.textContent = "Connexion";
+    authBtn.classList.remove("btn-logged");
+  }
+}
+
+function openAuth() {
+  authModal.classList.remove("hidden");
+  authNameInput.focus();
+}
+
+function closeAuth() {
+  authModal.classList.add("hidden");
+}
+
+authBtn.addEventListener("click", () => {
+  if (currentUser) {
+    const confirmLogout = confirm("Se déconnecter ?");
+    if (confirmLogout) {
+      currentUser = null;
+      localStorage.removeItem("feUserName");
+      updateAuthUI();
+      showToast("Vous êtes déconnecté(e)");
+    }
+  } else {
+    openAuth();
+  }
+});
+
+closeAuthModal.addEventListener("click", closeAuth);
+authModal.addEventListener("click", (e) => {
+  if (e.target === authModal) {
+    closeAuth();
+  }
+});
+
+authForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const name = authNameInput.value.trim();
+  if (!name) return;
+  currentUser = name;
+  localStorage.setItem("feUserName", name);
+  updateAuthUI();
+  closeAuth();
+  showToast(`Bienvenue, ${name} !`);
+});
+
+// =========================
+//      FONCTIONS FAVORIS
+// =========================
+
+function saveFavorites() {
+  localStorage.setItem("feFavorites", JSON.stringify([...favorites]));
+}
+
+function toggleFavorite(restaurantId) {
+  if (favorites.has(restaurantId)) {
+    favorites.delete(restaurantId);
+  } else {
+    favorites.add(restaurantId);
+  }
+  saveFavorites();
+  renderRestaurants();
+}
+
+// =========================
+//      RENDU RESTOS
+// =========================
+
 function renderRestaurants() {
   const query = searchInput.value.toLowerCase();
+  const isFavoritesCategory = filteredCategory === "favorites";
 
   const filtered = restaurants.filter((r) => {
-    const matchCategory =
-      filteredCategory === "all" || r.category === filteredCategory;
+    const isFav = favorites.has(r.id);
+    const matchCategory = isFavoritesCategory
+      ? isFav
+      : filteredCategory === "all" || r.category === filteredCategory;
+
     const matchSearch =
       r.name.toLowerCase().includes(query) ||
       r.tags.join(" ").toLowerCase().includes(query);
+
     return matchCategory && matchSearch;
   });
 
@@ -162,6 +266,9 @@ function renderRestaurants() {
     card.className = "restaurant-card";
     card.innerHTML = `
       <img src="${r.image}" alt="${r.name}" class="restaurant-image" />
+      <button class="favorite-btn ${favorites.has(r.id) ? "active" : ""}" data-id="${r.id}">
+        <span>${favorites.has(r.id) ? "♥" : "♡"}</span>
+      </button>
       <div class="restaurant-body">
         <div class="restaurant-name">${r.name}</div>
         <div class="restaurant-info">
@@ -170,7 +277,18 @@ function renderRestaurants() {
         <div class="restaurant-tags">${r.tags.join(" • ")}</div>
       </div>
     `;
+
+    // Clic sur la carte → ouvrir le resto
     card.addEventListener("click", () => openRestaurant(r.id));
+
+    // Clic sur le bouton favori (on empêche la propagation)
+    const favBtn = card.querySelector(".favorite-btn");
+    favBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const id = parseInt(favBtn.dataset.id, 10);
+      toggleFavorite(id);
+    });
+
     restaurantsContainer.appendChild(card);
   });
 }
@@ -240,7 +358,10 @@ function closeRestaurant() {
   restaurantModal.classList.add("hidden");
 }
 
-// PANIER
+// =========================
+//          PANIER
+// =========================
+
 function addToCart(restaurantId, itemId) {
   const restaurant = restaurants.find((r) => r.id === restaurantId);
   if (!restaurant) return;
@@ -311,8 +432,8 @@ function updateCartUI() {
       </div>
     `;
 
-    const [decBtn, , incBtn] =
-      row.querySelectorAll(".cart-item-qty button, .cart-item-qty span");
+    const decBtn = row.querySelector('button[data-action="dec"]');
+    const incBtn = row.querySelector('button[data-action="inc"]');
 
     decBtn.addEventListener("click", () => changeQuantity(item.key, -1));
     incBtn.addEventListener("click", () => changeQuantity(item.key, 1));
@@ -343,6 +464,10 @@ function closeCart() {
   cartModal.classList.add("hidden");
 }
 
+// =========================
+//          TOAST
+// =========================
+
 function showToast(message) {
   toast.textContent = message;
   toast.classList.add("show");
@@ -352,7 +477,10 @@ function showToast(message) {
   }, 1500);
 }
 
-// ÉVÉNEMENTS
+// =========================
+//        ÉVÉNEMENTS
+// =========================
+
 searchInput.addEventListener("input", renderRestaurants);
 
 filterButtons.forEach((btn) => {
@@ -387,6 +515,10 @@ checkoutBtn.addEventListener("click", () => {
   alert("Simulation : commande validée ✅ (à toi d'ajouter la suite)");
 });
 
-// INIT
+// =========================
+//           INIT
+// =========================
+
+loadAuthState();
 renderRestaurants();
 updateCartUI();
